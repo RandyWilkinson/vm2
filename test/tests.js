@@ -562,6 +562,7 @@ describe('modules', () => {
 		vm.run("require('foobar')", __filename);
 	})
 
+	
 	it('can require a module inside the vm', () => {
 		let vm = new NodeVM({
 			require: {
@@ -688,6 +689,20 @@ describe('modules', () => {
 		assert.strictEqual(vm.run("module.exports = require('fs').constructor.constructor === Function"), true);
 		assert.strictEqual(vm.run("module.exports = require('fs').readFileSync.constructor.constructor === Function"), true);
 		assert.strictEqual(vm.run("module.exports = require('fs').readFileSync()"), 'Nice try!');
+	})
+
+	it('require callback', () => {
+		let vm = new NodeVM({
+			sandbox: {},
+			require: {
+				external: true,
+				context: 'sandbox',
+				callbackRegex: /^(\.\/data\/)/,
+				callback: (filename) => { return 'require("./data/foobar2.js");console.log("Loaded custom string '+filename+'");'}
+			},
+		})
+
+		vm.run("require('./data/foobar.js')", __filename);
 	})
 })
 

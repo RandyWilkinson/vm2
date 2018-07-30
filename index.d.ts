@@ -17,6 +17,10 @@ export interface VMRequire {
   root?: string;
   /** Collection of mock modules (both external or builtin). */
   mock?: any;
+  /** Provides the ability to match on this regex then call the specified callback function */
+  callbackRegex?: any;
+  /** This callback function is called whenever the callback regex is matched for the filename/modulename */
+  callback?: (String) => String;
 }
 
 /**
